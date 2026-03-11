@@ -31,20 +31,21 @@ export const updateNote = async (req, res, next) => {
     const { isCompleted, userId } = req.body;
     const { id } = req.params;
     const user = await User.findById(userId);
-    if (!user)
-      res.json({
-        success: false,
-        message: 'User not found!',
-      });
+    if (!user) return next(new Error('User not found!'));
+    // res.json({
+    //   success: false,
+    //   message: 'User not found!',
+    // });
     const note = await Note.findOneAndUpdate(
       { _id: id, user: userId },
       { isCompleted: isCompleted },
     );
     if (!note) {
-      return res.json({
-        success: false,
-        message: 'note id is invalid or you are not owner',
-      });
+      return next(new Error('note id is invalid or you are not owner'));
+      // return res.json({
+      //   success: false,
+      //   message: 'note id is invalid or you are not owner',
+      // });
     }
     return res.json({
       success: true,
