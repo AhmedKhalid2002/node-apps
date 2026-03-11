@@ -7,4 +7,7 @@ router.patch('/:id', controller.updateNote);
 router.delete('/:id', controller.deleteNote);
 router.get('/', controller.allNotes);
 
+// get user notes
+router.get('/user/:id', controller.userNote);
+
 export default router;

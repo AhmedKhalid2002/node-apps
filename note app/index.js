@@ -17,4 +17,20 @@ app.use('/user', userRouter);
 // note
 app.use('/note', noteRouter);
 
+// not found
+
+app.all('*', (re, res, next) => {
+  res.json({
+    success: false,
+    message: 'Page Not Found!',
+  });
+});
+
+app.use((error, req, res, next) => {
+  res.json({
+    success: false,
+    message: error.message,
+    stack: error.stack,
+  });
+});
 app.listen(port, () => console.log(`App listening on port ${port}!`));

@@ -95,16 +95,39 @@ export const allNotes = async (req, res, next) => {
     // فائده ال populate بانها بتعمل فك العنصر ولازم يكون جزء من ال model  وبيشاور على ال model hggn jhkn  زى مثلا user id
     // const notes = await Note.find().populate("user");
 
-    // لو عايز ال اظهر ال email 
+    // لو عايز ال اظهر ال email
     // - id اخفاء ال
     const notes = await Note.find().populate({
-        path:'user',
-        select:'email age -_id'
+      path: 'user',
+      select: 'email age -_id',
     });
 
     return res.json({
       success: true,
       notes,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      error,
+    });
+  }
+};
+
+export const userNote = async (req, res, next) => {
+  try {
+    const { id } = req.params; //user id
+    const user = await User.findById(id);
+    if (!user)
+      res.json({
+        success: false,
+        message: 'User not found!',
+      });
+    const note = await Note.findOne({ user: id });
+
+    return res.json({
+      success: true,
+      note,
     });
   } catch (error) {
     return res.json({
