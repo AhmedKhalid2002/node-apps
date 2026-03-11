@@ -8,21 +8,20 @@ export const createNote = async (req, res, next) => {
     // data
     const { content, userId } = req.body;
     const user = await User.findById(userId);
-    if (!user)
-      res.json({
-        success: false,
-        message: 'User not found!',
-      });
+    if (!user) return next(new Error('User not found!'));
+    // res.json({
+    //   success: false,
+    //   message: 'User not found!',
+    // });
+
     const note = Note.create({ content, user: userId });
     res.json({
       success: true,
+      note,
       message: 'Note created successfully',
     });
   } catch (error) {
-    return res.json({
-      success: false,
-      error,
-    });
+    return next(new Error(error));
   }
 };
 
