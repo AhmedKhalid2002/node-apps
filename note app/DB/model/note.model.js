@@ -1,0 +1,12 @@
+import { model, Schema, Types } from 'mongoose';
+
+const noteSchema = new Schema(
+  {
+    content: { type: String, required: true },
+    isCompleted: { type: Boolean, default: false },
+    user: { type: Types.ObjectId, ref: 'User' },
+  },
+  { timestamps: true },
+);
+
+export const Note = model('Note', noteSchema);
