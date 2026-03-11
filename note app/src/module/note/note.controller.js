@@ -114,11 +114,7 @@ export const userNote = async (req, res, next) => {
   try {
     const { id } = req.params; //user id
     const user = await User.findById(id);
-    if (!user)
-      res.json({
-        success: false,
-        message: 'User not found!',
-      });
+    if (!user) return next(new Error('User not found!'));
     const note = await Note.findOne({ user: id });
 
     return res.json({
@@ -126,9 +122,6 @@ export const userNote = async (req, res, next) => {
       note,
     });
   } catch (error) {
-    return res.json({
-      success: false,
-      error,
-    });
+    return next(error);
   }
 };
