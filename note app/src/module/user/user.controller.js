@@ -29,34 +29,37 @@ export const signup = async (req, res, next) => {
       messege: 'You can login Now',
     });
   } catch (error) {
-    return next(new Error(error))
-    
+    return next(new Error(error));
   }
 };
 
 export const login = async (req, res, next) => {
-  // data
-  const { email, password } = req.body;
-  // check user
-  const user = await User.findOne({ email });
-  //   check email
-  if (!user) return next(new Error('email is invalid'));
+  try {
+    // data
+    const { email, password } = req.body;
+    // check user
+    const user = await User.findOne({ email });
+    //   check email
+    if (!user) return next(new Error('email is invalid'));
 
-  // return res.json({
-  //   success: false,
-  //   message: 'email is invalid',
-  // });
+    // return res.json({
+    //   success: false,
+    //   message: 'email is invalid',
+    // });
 
-  // check password
-  if (password !== user.password) return next('password is invalid');
+    // check password
+    if (password !== user.password) return next('password is invalid');
 
-  // return res.json({
-  //   success: false,
-  //   message: 'password is invalid',
-  // });
+    // return res.json({
+    //   success: false,
+    //   message: 'password is invalid',
+    // });
 
-  return res.json({
-    success: true,
-    message: 'User login successfully ',
-  });
+    return res.json({
+      success: true,
+      message: 'User login successfully ',
+    });
+  } catch (error) {
+    return next(new Error(error));
+  }
 };
