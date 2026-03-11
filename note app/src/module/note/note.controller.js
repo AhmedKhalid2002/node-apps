@@ -71,13 +71,12 @@ export const deleteNote = async (req, res, next) => {
     //   message: 'User not found!',
     // });
     const note = await Note.findById(id);
-    if (!note)
-      return next(new Error('note not found'))
-      // return res.json({ success: false, message: 'note not found' });
+    if (!note) return next(new Error('note not found'));
+    // return res.json({ success: false, message: 'note not found' });
 
     if (note.user.toString() !== userId)
-      return next(new Error('you not owner'))
-      // return res.json({ success: false, message: 'you not owner' });
+      return next(new Error('you not owner'));
+    // return res.json({ success: false, message: 'you not owner' });
 
     await note.deleteOne();
     await note.save();
@@ -86,7 +85,7 @@ export const deleteNote = async (req, res, next) => {
       message: 'Note Updated successfully',
     });
   } catch (error) {
-    return next(new Error(error))
+    return next(new Error(error));
   }
 };
 
@@ -107,10 +106,7 @@ export const allNotes = async (req, res, next) => {
       notes,
     });
   } catch (error) {
-    return res.json({
-      success: false,
-      error,
-    });
+    return next(new Error(error));
   }
 };
 
