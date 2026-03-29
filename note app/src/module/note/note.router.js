@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import * as controller from './note.controller.js';
+import { authentication } from '../../middleware/auth.middleware.js';
 const router = Router();
 
-router.post('/', controller.createNote);
-router.patch('/:id', controller.updateNote);
-router.delete('/:id', controller.deleteNote);
+router.post('/', authentication, controller.createNote);
+router.patch('/:id', authentication, controller.updateNote);
+router.delete('/:id', authentication, controller.deleteNote);
 router.get('/', controller.allNotes);
 
 // get user notes

@@ -50,9 +50,10 @@ export const login = asyncHandler(async (req, res, next) => {
   if (!isPasswordValid) return next(new Error('password is invalid'));
 
   // generete token
-  const token = jwt.sign({ id: user._id, email: user.email }, 'secretkey');
+  const token = jwt.sign({ id: user._id, email: user.email }, 'secretkey', {
+    expiresIn:"1d"
+  });
 
-  
   // send response
   return res.json({
     success: true,

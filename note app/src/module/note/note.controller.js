@@ -2,21 +2,13 @@
 import { Note } from '../../../DB/model/note.model.js';
 import { User } from '../../../DB/model/user.model.js';
 import { asyncHandler } from '../../../utils/asyncHandler.js';
-import jwt from 'jsonwebtoken';
 export const createNote = asyncHandler(async (req, res, next) => {
-  const { token } = req.header;
-  // check token
-  if (!token) return next(new Error('you must login first'));
-  // verify token
-  const pyload = jwt.verify(token, 'secretkey');
-  // check token validity
-  if (!pyload) return next(new Error('invalid token'));
+  const userInfo = req.pyload; // ال payload اللى جايه من ال authentication
   // data
   const { content} = req.body;
-  const user = await User.findById(pyload.id);
-  if (!user) return next(new Error('User not found!'));
 
-  const note = Note.create({ content, user: payload.id });
+
+  const note = Note.create({ content, user: userInfo.id });
   res.json({
     success: true,
     note,
@@ -26,24 +18,16 @@ export const createNote = asyncHandler(async (req, res, next) => {
 
 export const updateNote = asyncHandler(async (req, res, next) => {
   // data
-  const { isCompleted, userId } = req.body;
+  const { isCompleted } = req.body;
   const { id } = req.params;
-  const user = await User.findById(userId);
-  if (!user) return next(new Error('User not found!'));
-  // res.json({
-  //   success: false,
-  //   message: 'User not found!',
-  // });
+   const userInfo = req.pyload; // ال payload اللى جايه من ال authentication
+
   const note = await Note.findOneAndUpdate(
-    { _id: id, user: userId },
+    { _id: id, user: userInfo.id },
     { isCompleted: isCompleted },
   );
   if (!note) {
     return next(new Error('note id is invalid or you are not owner'));
-    // return res.json({
-    //   success: false,
-    //   message: 'note id is invalid or you are not owner',
-    // });
   }
   return res.json({
     success: true,
@@ -53,10 +37,9 @@ export const updateNote = asyncHandler(async (req, res, next) => {
 
 export const deleteNote = asyncHandler(async (req, res, next) => {
   // data
-  const { userId } = req.body;
   const { id } = req.params;
-  const user = await User.findById(userId);
-  if (!user) return next(new Error('User not found!'));
+   const userInfo = req.pyload; // ال payload اللى جايه من ال authentication
+
   // res.json({
   //   success: false,
   //   message: 'User not found!',
@@ -65,7 +48,7 @@ export const deleteNote = asyncHandler(async (req, res, next) => {
   if (!note) return next(new Error('note not found'));
   // return res.json({ success: false, message: 'note not found' });
 
-  if (note.user.toString() !== userId) return next(new Error('you not owner'));
+  if (note.user.toString() !== userInfo.id) return next(new Error('you not owner'));
   // return res.json({ success: false, message: 'you not owner' });
 
   await note.deleteOne();
