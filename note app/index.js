@@ -14,7 +14,7 @@ await connectDb();
 // user
 app.use('/user', userRouter);
 
-// note
+// note هو اللى بيحتوى على كل ال endpoints الخاصة بال notes
 app.use('/note', noteRouter);
 
 // not found
@@ -25,7 +25,7 @@ app.use('/note', noteRouter);
 //     message: 'Page Not Found!',
 //   });
 // });
-// التحديث الجديد
+// التحديث الجديد للتعامل مع ال not found و ال global error handler
 app.use( (req, res, next) => {
   res.json({
     success: false,
@@ -33,6 +33,7 @@ app.use( (req, res, next) => {
   });
 });
 
+// global error handler هو اللى بيستقبل اى error بيحصل فى ال controller و بيرسله هنا عشان يرد بيه على ال client
 app.use((error, req, res, next) => {
   res.json({
     success: false,
