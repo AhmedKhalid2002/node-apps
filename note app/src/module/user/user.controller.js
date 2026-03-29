@@ -1,6 +1,7 @@
 import { User } from '../../../DB/model/user.model.js';
 import { asyncHandler } from '../../../utils/asyncHandler.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 export const signup = asyncHandler(async (req, res, next) => {
   // data email password age
   const { email, confirmPassword, password, age } = req.body;
@@ -40,22 +41,22 @@ export const login = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email });
   //   check email
   if (!user) return next(new Error('email is invalid'));
-
   // return res.json({
   //   success: false,
   //   message: 'email is invalid',
   // });
-
   // check password
-  if (password !== user.password) return next('password is invalid');
+  const isPasswordValid = bcrypt.compareSync(password, user.password);
+  if (!isPasswordValid) return next(new Error('password is invalid'));
 
-  // return res.json({
-  //   success: false,
-  //   message: 'password is invalid',
-  // });
+  // generete token
+  const token = jwt.sign({ id: user._id, email: user.email }, 'secretkey');
 
+  
+  // send response
   return res.json({
     success: true,
     message: 'User login successfully ',
+    token,
   });
 });

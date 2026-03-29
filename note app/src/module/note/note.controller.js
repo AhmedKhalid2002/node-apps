@@ -2,18 +2,21 @@
 import { Note } from '../../../DB/model/note.model.js';
 import { User } from '../../../DB/model/user.model.js';
 import { asyncHandler } from '../../../utils/asyncHandler.js';
-
+import jwt from 'jsonwebtoken';
 export const createNote = asyncHandler(async (req, res, next) => {
+  const { token } = req.header;
+  // check token
+  if (!token) return next(new Error('you must login first'));
+  // verify token
+  const pyload = jwt.verify(token, 'secretkey');
+  // check token validity
+  if (!pyload) return next(new Error('invalid token'));
   // data
-  const { content, userId } = req.body;
-  const user = await User.findById(userId);
+  const { content} = req.body;
+  const user = await User.findById(pyload.id);
   if (!user) return next(new Error('User not found!'));
-  // res.json({
-  //   success: false,
-  //   message: 'User not found!',
-  // });
 
-  const note = Note.create({ content, user: userId });
+  const note = Note.create({ content, user: payload.id });
   res.json({
     success: true,
     note,
