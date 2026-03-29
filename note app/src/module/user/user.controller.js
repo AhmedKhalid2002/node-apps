@@ -1,4 +1,4 @@
-import { User } from '../../../DB/model/user.model';
+import { User } from '../../../DB/model/user.model.js';
 
 export const signup = async (req, res, next) => {
   try {

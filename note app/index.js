@@ -19,7 +19,14 @@ app.use('/note', noteRouter);
 
 // not found
 
-app.all('*', (re, res, next) => {
+// app.all('/*', (re, res, next) => {
+//   res.json({
+//     success: false,
+//     message: 'Page Not Found!',
+//   });
+// });
+// التحديث الجديد
+app.use( (req, res, next) => {
   res.json({
     success: false,
     message: 'Page Not Found!',
