@@ -2,22 +2,8 @@ import Joi from 'joi';
 import asyncHandler from '../../../utils/asyncHandler.js';
 import { User } from '../../../DB/model/user.model.js';
 export const signUp = asyncHandler(async (req, res) => {
-  // validation
-  const signupSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
-    confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
-    age: Joi.number().integer().min(18).required(),
-    name: Joi.string().min(3).max(30).required(),
-  }).required();
 
-  const { error, value } = signupSchema.validate(req.body, {
-    abortEarly: false,
-  });
-  // check validation error
-  if (error) {
-    return next(new Error(error.details.map((err) => err.message).join(', ')));
-  }
+ 
   //   hash password
   const hashPassword = bcrypt.hashSync(password, process.env.SALT_ROUNDS);
   // create user
