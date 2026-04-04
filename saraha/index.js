@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDb } from './DB/connection.js';
+import authRouter from './src/modules/auth/auth.router.js';
+import messageRouter from './src/modules/message/message.router.js';
 
 dotenv.config();
 const app = express();
@@ -12,7 +14,9 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 // DB connection
 await connectDb();
-// user routes
+// auth routes
+app.use('/auth', authRouter);
+app.use('/message', messageRouter);
 
 // not found
 app.use((req, res, next) => {
