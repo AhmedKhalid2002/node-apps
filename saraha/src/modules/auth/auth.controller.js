@@ -1,6 +1,8 @@
 import asyncHandler from '../../../utils/asyncHandler.js';
 import { User } from '../../../DB/model/user.model.js';
 import { sendEmail } from '../../../utils/senEmial.js';
+import { Token } from '../../../DB/model/token.model.js';
+
 import Randomstring from 'randomstring';
 export const signUp = asyncHandler(async (req, res, next) => {
   //   hash password
@@ -120,8 +122,15 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   const hashPassword = bcrypt.hashSync(newPassword, process.env.SALT_ROUNDS);
   // update user password
   user.password = hashPassword;
-  user.forgetCode =   undefined; // clear reset code
+  user.forgetCode = undefined; // clear reset code
   await user.save();
+
+  // token
+  const tokens = await Token.find({ userId: user._id });
+  tokens.forEach((token) => {
+    token.isValid = false;
+    token.save();
+  });
   // send confirmation email
   const emailSent = await sendEmail({
     to: user.email,
@@ -137,5 +146,4 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
     success: true,
     message: 'Password reset successful',
   });
-
 });
