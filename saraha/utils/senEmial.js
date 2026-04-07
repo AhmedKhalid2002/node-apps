@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export function sendEmail({ to, subject, text }) {
+export function sendEmail({ to, subject, text, html }) {
   //^ transporter
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
@@ -17,6 +17,7 @@ export function sendEmail({ to, subject, text }) {
     to,
     subject,
     text,
+    html,
   });
 
   if (info.accepted.length > 0) return true;
