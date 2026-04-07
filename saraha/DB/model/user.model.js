@@ -6,6 +6,8 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     age: { type: Number, min: 18, max: 70 },
     name: { type: String, required: true },
+    isConfirmed: { type: Boolean, default: false },
+    forgetCode: { type: String, unique:true },
   },
   { timestamps: true },
 );
