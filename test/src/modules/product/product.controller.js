@@ -13,3 +13,21 @@ export const createProduct = asyncHandler(async (req, res, next) => {
     product,
   });
 });
+
+export const updateProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { name, price, description } = req.body;
+
+  const product = await Product.findByIdAndUpdate(
+    id,
+    { name, price, description },
+    { new: true },
+  );
+
+  if (!product) return next(new Error('Failed to update product'));
+  return res.status(200).json({
+    success: true,
+    message: 'Product updated successfully',
+    product,
+  });
+});
