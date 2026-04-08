@@ -8,4 +8,7 @@ const router = Router();
 router.post('/', isAuthandicated,validation(createProductSchema) ,controller.createProduct);
 // update product
 router.put('/:id', isAuthandicated,validation(updateProductSchema) ,controller.updateProduct);
+
+// filter products
+router.get('/', validation(filterProductSchema),controller.filterProducts);
 export default router;

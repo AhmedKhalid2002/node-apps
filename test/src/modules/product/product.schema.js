@@ -10,4 +10,9 @@ export const updateProductSchema = Joi.object({
   name: Joi.string(),
   price: Joi.number(),
   description: Joi.string(),
-}).required();
+})
+
+export const filterProductSchema = Joi.object({
+  name: Joi.string().optional(),
+  price: Joi.number().optional(),
+});

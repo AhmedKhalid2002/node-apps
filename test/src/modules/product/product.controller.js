@@ -31,3 +31,20 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     product,
   });
 });
+
+export const filterProducts = asyncHandler(async (req, res, next) => {
+  const { name, price } = req.query;
+  //   build filter object
+  const filter = {};
+
+  if (name) filter.name = name;
+  if (price) filter.price = price;
+
+  const products = await Product.findAll({ where: filter });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Products retrieved successfully',
+    products,
+  });
+});
