@@ -8,8 +8,8 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     isConfirmed: { type: Boolean, default: false },
     forgetCode: { type: String, unique: true },
-    profileImage: { type: String },
-    coverImage: [{ type: String }],
+    profileImage: { secure_url:{type:String},public_id:{type:String} },
+    coverImage: [{ secure_url:{type:String},public_id:{type:String} },],
   },
   { timestamps: true },
 );

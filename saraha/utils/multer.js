@@ -9,10 +9,11 @@ export const fileValidation = {
 export function uploadFile({ folderName ,filter}) {
   //  disk storage
   const storage = diskStorage({
-    destination: `uploads/${folderName}`,
-    filename: (req, file, cb) => {
-      cb(null, nanoid() + '__' + file.originalname); // بتعمل rename file , save file , call next()
-    },
+    // destination: `uploads/${folderName}`,
+    // filename: (req, file, cb) => {
+    //   cb(null, nanoid() + '__' + file.originalname); // بتعمل rename file , save file , call next()
+    // },
+    
   });
 
   // multer

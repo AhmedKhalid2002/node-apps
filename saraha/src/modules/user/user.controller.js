@@ -1,5 +1,6 @@
 import { User } from '../../../DB/model/user.model.js';
 import { asyncHandler } from '../../../utils/asyncHandler.js';
+import cloudinary from '../../../utils/cloudnairy.js';
 
 export const uploadProfileImage = asyncHandler(async (req, res, next) => {
   if (!req.file) return next(new Error('No file uploaded', { cause: 400 }));
@@ -29,5 +30,18 @@ export const uploadCoverImage = asyncHandler(async (req, res, next) => {
   return res.json({
     success: true,
     message: 'Cover uploaded successfully',
+  });
+});
+
+export const uploadProfileImageCloud = asyncHandler(async (req, res, next) => {
+  if (!req.file) return next(new Error('No file uploaded', { cause: 400 }));
+  const id = req.user._id;
+  const { secure_url, public_id } = cloudinary.uploader.upload(req.file.path);
+  await User.findByIdAndUpdate(id, {
+    profileImage: { secure_url, public_id },
+  });
+  res.json({
+    success: true,
+    message: 'Profile image uploaded successfully', // TODO
   });
 });

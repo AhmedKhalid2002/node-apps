@@ -22,4 +22,15 @@ router.get(
   }).array('coverImage', 3),
   userController.uploadCoverImage,
 );
+
+// upload on cloud
+
+router.post(
+  '/profile-image-cloud',
+  isAuthenticated,
+  uploadFile({
+    filter: fileValidation.images,
+  }).single('profileImage'),
+  userController.uploadProfileImageCloud,
+);
 export default router;
