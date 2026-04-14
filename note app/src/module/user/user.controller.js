@@ -1,3 +1,4 @@
+import { Token } from '../../../DB/model/token.model.js';
 import { User } from '../../../DB/model/user.model.js';
 import { asyncHandler } from '../../../utils/asyncHandler.js';
 import bcrypt from 'bcryptjs';
@@ -24,7 +25,10 @@ export const signup = asyncHandler(async (req, res, next) => {
   
     */
   //  hash password
-  const hashedPassword = bcrypt.hashSync(password, 8);
+  const hashedPassword = bcrypt.hashSync(
+    password,
+    Number(process.env.SALT_ROUNDS),
+  );
   // create user
   await User.create({ password: hashedPassword, age, email });
   // send response
@@ -50,14 +54,33 @@ export const login = asyncHandler(async (req, res, next) => {
   if (!isPasswordValid) return next(new Error('password is invalid'));
 
   // generete token
-  const token = jwt.sign({ id: user._id, email: user.email }, 'secretkey', {
-    expiresIn:"1d"
+  const token = jwt.sign(
+    { id: user._id, email: user.email },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: '1d',
+    },
+  );
+  // save token in db
+  await Token.create({
+    user: user._id,
+    token,
+    expiredAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    agent: req.headers['user-agent'],
   });
-
   // send response
   return res.json({
     success: true,
     message: 'User login successfully ',
     token,
+  });
+});
+
+export const logout = asyncHandler(async (req, res, next) => {
+  const { token } = req.header;
+  await Token.findOneAndUpdate({ token, isValid: true }, { isValid: false });
+  return res.json({
+    success: true,
+    message: 'User logout successfully ',
   });
 });

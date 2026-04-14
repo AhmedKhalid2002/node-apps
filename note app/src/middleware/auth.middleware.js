@@ -1,17 +1,22 @@
 import jwt from 'jsonwebtoken';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import { User } from '../../DB/model/user.model.js';
+import { Token } from '../../DB/model/token.model.js';
 export const authentication = asyncHandler(async (req, res, next) => {
   // get token from header
   const { token } = req.header;
-  const berarToken = '___berar___' + token;
+  const berarToken = process.env.BERAR_TOKEN + token;
   // check token format
   if (!berarToken.startsWith('___berar___'))
-    return next(new Error('invalid token format'));
+    return next(new Error('invalid token'));
+
   // check token
   if (!token) return next(new Error('you must login first'));
+  // check token in db
+  const tokenDB = await Token.findOne({ token, isValid: true });
+  if (!tokenDB) return next(new Error('invalid token'));
   // verify token
-  const pyload = jwt.verify(token, 'secretkey');
+  const pyload = jwt.verify(token, process.env.SECRET_KEY);
   // check token validity
   if (!pyload) return next(new Error('invalid token'));
 

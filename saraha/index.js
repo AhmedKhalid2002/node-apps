@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { connectDb } from './DB/connection.js';
 import authRouter from './src/modules/auth/auth.router.js';
 import messageRouter from './src/modules/message/message.router.js';
-
+import userRouter from './src/modules/user/user.router.js';
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -17,6 +17,7 @@ await connectDb();
 // auth routes
 app.use('/auth', authRouter);
 app.use('/message', messageRouter);
+app.use('/user', userRouter);
 
 // not found
 app.use((req, res, next) => {
