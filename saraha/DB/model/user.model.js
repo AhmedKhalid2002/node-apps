@@ -7,9 +7,11 @@ const userSchema = new Schema(
     age: { type: Number, min: 18, max: 70 },
     name: { type: String, required: true },
     isConfirmed: { type: Boolean, default: false },
-    forgetCode: { type: String, unique:true },
+    forgetCode: { type: String, unique: true },
+    profileImage: { type: String },
+    coverImage: [{ type: String }],
   },
   { timestamps: true },
 );
 
-export  const User = model('User', userSchema);
+export const User = model('User', userSchema);

@@ -6,10 +6,13 @@ import authRouter from './src/modules/auth/auth.router.js';
 import messageRouter from './src/modules/message/message.router.js';
 import userRouter from './src/modules/user/user.router.js';
 dotenv.config();
-const app = express();
-app.use(cors());
 const port = process.env.PORT || 3000;
-
+// parse form data
+const app = express();
+// middlewares
+app.use(cors());
+// static files
+app.use("/uploads", express.static('uploads'));
 // parse
 app.use(express.json());
 // DB connection
