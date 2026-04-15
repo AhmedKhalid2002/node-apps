@@ -49,8 +49,12 @@ export const uploadProfileImageCloud = asyncHandler(async (req, res, next) => {
 });
 
 export const profile = asyncHandler((req, res, next) => {
+<<<<<<< HEAD
   const qrCode = generateQRCode(req.user);
 
+=======
+  const qrCode = generateQRCode({ data: req.user });
+>>>>>>> 2f68f77 (qrcode)
   return res.json({
     success: true,
     message: 'Qrcode created successfully',
