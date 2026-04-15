@@ -1,6 +1,7 @@
 import { User } from '../../../DB/model/user.model.js';
 import { asyncHandler } from '../../../utils/asyncHandler.js';
 import cloudinary from '../../../utils/cloudnairy.js';
+import { generateQRCode } from '../../../utils/qrCode.js';
 
 export const uploadProfileImage = asyncHandler(async (req, res, next) => {
   if (!req.file) return next(new Error('No file uploaded', { cause: 400 }));
@@ -40,8 +41,19 @@ export const uploadProfileImageCloud = asyncHandler(async (req, res, next) => {
   await User.findByIdAndUpdate(id, {
     profileImage: { secure_url, public_id },
   });
+
   res.json({
     success: true,
     message: 'Profile image uploaded successfully', // TODO
+  });
+});
+
+export const profile = asyncHandler((req, res, next) => {
+  const qrCode = generateQRCode(req.user);
+
+  return res.json({
+    success: true,
+    message: 'Qrcode created successfully',
+    qrCode,
   });
 });

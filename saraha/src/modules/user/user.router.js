@@ -33,4 +33,6 @@ router.post(
   }).single('profileImage'),
   userController.uploadProfileImageCloud,
 );
+
+router.post('/profile', isAuthenticated, userController.profile);
 export default router;
