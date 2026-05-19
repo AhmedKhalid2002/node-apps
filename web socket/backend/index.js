@@ -15,5 +15,12 @@ io.on('connection', (socket) => {
   console.log('user connected', socket.id);
   socket.on('chat', (data) => {
     console.log("message from client", data );
+    // send data to client such as "private chat" 
+    // socket.emit('chat', data);
+    // send data to all clients such as "group chat"
+    io.emit('chat', data);
+
+    // send data to other clients such as "private chat" expect sender
+    // socket.broadcast.emit('chat', data);
   }); 
 });

@@ -12,3 +12,11 @@ btn.addEventListener('click', () => {
   socket.emit('chat', msg.value);
   // recive from backend use on
 });
+
+socket.on('chat', (data) => {
+  const p = document.createElement('p');
+  p.textContent = data;
+  document.body.appendChild(p);
+
+  console.log(data);
+});
